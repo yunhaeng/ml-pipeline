@@ -17,9 +17,10 @@ function runAirflowCommand() {
             if [ $attempt_num = 1 ]; then #첫 시작
                 eval "${AIRFLOW_COMMAND}"
                 echo "Run the ${PROCESS_NAME}."
-            fi
+            else
             echo "The ${PROCESS_NAME} not found.(${attempt_num}/${max_attempts}) Trying again..."
             sleep 2
+            fi
         else
             echo "The ${PROCESS_NAME} is running."
             success=true
