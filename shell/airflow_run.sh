@@ -14,13 +14,13 @@ function runAirflowCommand() {
         getAirflowProcessIDs
         if [ -z "$PROCESS_IDS" ]; then #process_ids의 길이가 0이면(==process가 실행되지 않았으면) true
             # Run the airflow
+            # Run airflow 명령어가 작동하지 않음.
             if [ $attempt_num = 1 ]; then #첫 시작
                 eval "${AIRFLOW_COMMAND}"
                 echo "Run the ${PROCESS_NAME}."
-            else
-            echo "The ${PROCESS_NAME} not found.(${attempt_num}/${max_attempts}) Trying again..."
-            sleep 2
             fi
+                echo "The ${PROCESS_NAME} not found.(${attempt_num}/${max_attempts}) Trying again..."
+                sleep 2
         else
             echo "The ${PROCESS_NAME} is running."
             success=true
