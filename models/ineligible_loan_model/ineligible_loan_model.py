@@ -23,8 +23,9 @@ with DAG(dag_id="ineligible_loan_model",
          tags=["mlops", "study"],
          ) as dag:
     
+    #task_id에는 space가 들어가면 안된다.
     data_extract = EmptyOperator(
-        task_id="데이터 추출"
+        task_id="데이터추출"
     )
 
     data_preperation = EmptyOperator(
@@ -32,7 +33,7 @@ with DAG(dag_id="ineligible_loan_model",
     )
 
     prediction = EmptyOperator(
-        task_id="모델 예측"
+        task_id="모델예측"
     )
 
     data_extract >> data_preperation >> prediction
