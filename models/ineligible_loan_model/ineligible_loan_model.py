@@ -13,7 +13,7 @@ local_timezone = pendulum.timezone("Asia/Seoul")
 conn_id = "feature_store"
 airflow_dags_path = Variable.get("AIRFLOW_DAGS_PATH")
 sql_file_path = (f"{airflow_dags_path}/models/ineligible_loan_model"
-                 f"/data_extract/features.sql")
+                 f"/data_extract/ featuers.sql")
 
 def read_sql_file(file_path):
     with open(file_path, "r") as file:
