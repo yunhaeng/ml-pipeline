@@ -4,7 +4,6 @@ from datetime import datetime
 from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.empty import EmptyOperator
-from airflow.operators.bash import BashOperator
 from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 
 from support.callback_functions import success_callback, failure_callback

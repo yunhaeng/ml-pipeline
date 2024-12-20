@@ -22,7 +22,7 @@ class DateValues:
         return datetime.now(timezone('Asia/Seoul')).strftime(DateFormat.yyyyMMdd.value)
     
     @staticmethod
-    def get_before_one_days():
+    def get_before_one_day():
         """
         Return yesterday's date
 

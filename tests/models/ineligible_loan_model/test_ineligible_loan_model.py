@@ -1,16 +1,12 @@
 import unittest
 
+from support.date_values import DateValues
+from tests import context
+
 class TestIneligibleLoanModel(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.base_day = "20241218"
-
-        class ContextTask:
-            email = "mlops.dkfk591@gmail.com"
-            owner = "mlops.study"
-
-        context_task = ContextTask()
-        context = {'task': context_task}
+        cls.base_day = DateValues.get_before_one_day()
         cls.context = context
     
     def test_data_extract(self):
@@ -24,3 +20,6 @@ class TestIneligibleLoanModel(unittest.TestCase):
             )
         )
         model.data_extract.execute(self.context)
+
+if __name__ == '__main__':
+    unittest.main()
