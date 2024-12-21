@@ -11,6 +11,7 @@ with open('./config.yaml', 'r') as f:
 os.environ["FEATURE_STORE_URL"] = config['feature_store']
 os.environ["OHE_PATH"] = config['model_path']['ohe']
 os.environ["LBE_PATH"] = config['model_path']['lbe']
+os.environ["MMS_PATH"] = config['model_path']['mms']
 
 class TestIneligibleLoanModel(unittest.TestCase):
     @classmethod

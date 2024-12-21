@@ -2,12 +2,11 @@ import os
 from sqlalchemy import create_engine, text
 import pandas as pd
 import joblib
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.preprocessing import LabelEncoder
 
 feature_store_url = os.getenv("FEATURE_STORE_URL", "")
 ohe_path = os.getenv("OHE_PATH", "")
 label_encoders_path = os.getenv("LBE_PATH" ,"")
+min_max_scalers_path = os.getenv("MMS_PATH" ,"")
 
 
 class Preparatioin:
@@ -88,3 +87,18 @@ class Preparatioin:
             print(f"label_encoder.classes_ = {label_encoder.classes_}")
             
             loan_df[categorical_feature] = label_encoder.transform(loan_df[categorical_feature])
+
+        ###########################################################################
+        ## 5. 표준화 및 정규화
+        ###########################################################################
+
+        numeric_features = ['applicant_income', 'coapplicant_income', 'loan_amount_term']
+
+        ###normalization
+        #min_max scaler load
+        min_max_scalers = joblib.load(min_max_scalers_path)
+
+        # numeric_features 정규화
+        for numeric_feature in numeric_features:
+            min_max_scaler = min_max_scalers[numeric_feature]
+            loan_df[numeric_feature] = min_max_scaler.transform(loan_df[[numeric_feature]])
