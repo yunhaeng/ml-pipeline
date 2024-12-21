@@ -1,7 +1,10 @@
 import unittest
+import os
 
 from support.date_values import DateValues
 from tests import context
+
+os.environ["FEATURE_STORE_URL"] = "mysql+pymysql://root:root@localhost/mlops"
 
 class TestIneligibleLoanModel(unittest.TestCase):
     @classmethod
@@ -20,6 +23,19 @@ class TestIneligibleLoanModel(unittest.TestCase):
             )
         )
         model.data_extract.execute(self.context)
+
+    def test_data_preparation(self):
+        import models.ineligible_loan_model.ineligible_loan_model as model
+        from models.ineligible_loan_model.data_preparation.preparation import Preparatioin
+
+        preparation = Preparatioin(
+            model_name=model.model_name, 
+            model_version=model.model_version, 
+            base_day=self.base_day
+            )
+        preparation.preprocessiong()
+
+
 
 if __name__ == '__main__':
     unittest.main()
