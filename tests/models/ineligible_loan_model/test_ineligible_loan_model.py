@@ -1,10 +1,16 @@
 import unittest
 import os
+import yaml
 
 from support.date_values import DateValues
 from tests import context
 
-os.environ["FEATURE_STORE_URL"] = "mysql+pymysql://root:root@localhost/mlops"
+with open('./config.yaml', 'r') as f:
+    config = yaml.load(f, Loader=yaml.FullLoader)
+
+os.environ["FEATURE_STORE_URL"] = config['feature_store']
+os.environ["OHE_PATH"] = config['model_path']['ohe']
+os.environ["LBE_PATH"] = config['model_path']['lbe']
 
 class TestIneligibleLoanModel(unittest.TestCase):
     @classmethod
