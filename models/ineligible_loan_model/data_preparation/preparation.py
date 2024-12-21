@@ -67,6 +67,7 @@ class Preparatioin:
         encoded_feature_names = ohe.get_feature_names_out(one_hot_features)
 
         #원핫 인코딩
+        print('One-Hot Encoding')
         one_hot_encoded_data = ohe.transform(loan_df[one_hot_features]).toarray()
         loan_encoded_df = pd.DataFrame(one_hot_encoded_data, columns=encoded_feature_names)
         loan_df = pd.concat([loan_df, loan_encoded_df], axis=1)
@@ -99,6 +100,7 @@ class Preparatioin:
         min_max_scalers = joblib.load(min_max_scalers_path)
 
         # numeric_features 정규화
+        print('Normalization')
         for numeric_feature in numeric_features:
             min_max_scaler = min_max_scalers[numeric_feature]
             loan_df[numeric_feature] = min_max_scaler.transform(loan_df[[numeric_feature]])
