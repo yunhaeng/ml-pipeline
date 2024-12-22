@@ -5,7 +5,7 @@ import joblib
 
 feature_store_url = os.getenv("FEATURE_STORE_URL", "")
 model_output_home = os.getenv("MODEL_OUTPUT_HOME", "")
-
+mlops_data_store = os.getenv("MLOPS_DATA_STORE")
 
 class Preparatioin:
     def __init__(self, 
@@ -15,7 +15,14 @@ class Preparatioin:
         self._model_name = model_name
         self._model_version = model_version
         self._base_day = base_day
+        self._data_preparation_path = (f"{mlops_data_store}/data_preparation/{self._model_name}"
+                                       f"/{self._model_version}/{self._base_day}")
+        self._makedir()
         
+    def _makedir(self):
+        if not os.path.isdir(self._data_preparation_path):
+            os.makedirs(self._data_preparation_path)
+
     def preprocessiong(self):
         ###########################################################################
         ## 1. 데이터추출
@@ -113,3 +120,8 @@ class Preparatioin:
         for numeric_feature in numeric_features:
             min_max_scaler = min_max_scalers[numeric_feature]
             loan_df[numeric_feature] = min_max_scaler.transform(loan_df[[numeric_feature]])
+
+        #save output data
+        feature_file_name = f"{self._model_name}_{self._model_version}.csv"
+        loan_df.to_csv(f"{self._data_preparation_path}"
+                       f"/{feature_file_name}", index=False)

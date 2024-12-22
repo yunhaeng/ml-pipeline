@@ -14,6 +14,9 @@ airflow_dags_path = Variable.get("AIRFLOW_DAGS_PATH")
 os.environ["MODEL_OUTPUT_HOME"] = (f"{airflow_dags_path}"
                                     f"/models/ineligible_loan_model")
 
+home_dir = os.path.expanduser("~")
+os.environ["MLOPS_DATA_STORE"] = f"{home_dir}/airflow/mlops_data_store"
+
 class TestIneligibleLoanModel(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
