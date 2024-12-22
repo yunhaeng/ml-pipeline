@@ -84,10 +84,26 @@ class Preparatioin:
         ###########################################################################
         ## 4. 표준화 및 정규화
         ###########################################################################
-
+        
+        #Standardiztion
         numeric_features = ['applicant_income', 'coapplicant_income', 'loan_amount_term']
 
+        #standard scalers 로드
+        standard_scalers = joblib.load(f'{model_output_home}'
+                                       f'/model_output/standard_scalers.joblib')
+
+        # 표준화
+        print(f"numeric_features 표준화")
+        for numeric_feature in numeric_features:
+            standard_scaler = standard_scalers[numeric_feature]
+            print(f"numeric_feature = {numeric_feature}")
+            
+            loan_df[numeric_feature] = standard_scaler.transform(loan_df[[numeric_feature]])
+
+
         ###normalization
+        numeric_features = ['applicant_income', 'coapplicant_income', 'loan_amount_term']
+
         #min_max scaler load
         min_max_scalers = joblib.load(f"{model_output_home}"
                                       f"/model_output/min_max_scalers.joblib")
