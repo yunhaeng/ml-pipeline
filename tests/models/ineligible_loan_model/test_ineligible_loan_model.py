@@ -2,6 +2,7 @@ import unittest
 import os
 import yaml
 
+from airflow.models import Variable
 from support.date_values import DateValues
 from tests import context
 
@@ -9,9 +10,9 @@ with open('./config.yaml', 'r') as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
 
 os.environ["FEATURE_STORE_URL"] = config['feature_store']
-os.environ["OHE_PATH"] = config['model_path']['ohe']
-os.environ["LBE_PATH"] = config['model_path']['lbe']
-os.environ["MMS_PATH"] = config['model_path']['mms']
+airflow_dags_path = Variable.get("AIRFLOW_DAGS_PATH")
+os.environ["MODEL_OUTPUT_HOME"] = (f"{airflow_dags_path}"
+                                    f"/models/ineligible_loan_model")
 
 class TestIneligibleLoanModel(unittest.TestCase):
     @classmethod

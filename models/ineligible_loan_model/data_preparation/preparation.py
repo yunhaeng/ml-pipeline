@@ -4,9 +4,7 @@ import pandas as pd
 import joblib
 
 feature_store_url = os.getenv("FEATURE_STORE_URL", "")
-ohe_path = os.getenv("OHE_PATH", "")
-label_encoders_path = os.getenv("LBE_PATH" ,"")
-min_max_scalers_path = os.getenv("MMS_PATH" ,"")
+model_output_home = os.getenv("MODEL_OUTPUT_HOME", "")
 
 
 class Preparatioin:
@@ -36,20 +34,12 @@ class Preparatioin:
         ###########################################################################
         ## 2. 데이터 전처리
         ###########################################################################
-        #random 처리 시 항상 동일한 값이 나오도록 random_state 값을 설정한다.
-        random_state = 100
-
-        #df.sample(frac=1) 데이터프레임을 섞는 작업 진행. frac은 비율을 이야기한다. 1인 경우 전체를 셔플.
-        loan_df = loan_df.sample(frac=1, random_state=random_state).reset_index(drop=True)
-
-        ###########################################################################
-        ## 3. 결측값 제거
-        ###########################################################################
+        #결측치 제거
         loan_df['family_dependents'].fillna('0', inplace=True)
         loan_df['loan_amount_term'].fillna(60, inplace=True)
 
         ###########################################################################
-        ## 4. 데이터 변환(인코딩)
+        ## 3. 데이터 변환(인코딩)
         ###########################################################################
         #replace를 활용하여 텍스트로 되어 있는 범주형 데이터를 숫자형으로 변경
         loan_df.gender = loan_df.gender.replace({"Male": 1, "Female": 0})
@@ -60,7 +50,8 @@ class Preparatioin:
         #married, self_employed 원핫 인코딩 적용
         #one_hot_encoder 불러오기
         one_hot_features = ['married', 'self_employed']
-        ohe = joblib.load(ohe_path)
+        ohe = joblib.load(f"{model_output_home}"
+                          f"/model_output/one_hot_encoder.joblib")
 
         #인코딩 컬럼명 조회
         #원-핫 인코딩이 되었을 때, [married -> married_No, married_Yes], [self_employed -> self_employed_Yes, self_employed_No로 변경]
@@ -78,7 +69,8 @@ class Preparatioin:
         #label encoding
         #load label encoder
         categorical_features = ['property_area', 'family_dependents']
-        label_encoders = joblib.load(label_encoders_path)
+        label_encoders = joblib.load(f"{model_output_home}"
+                                     f"/model_output/label_encoders.joblib")
 
         #라벨 인코딩
         print('Label Encoding')
@@ -90,14 +82,15 @@ class Preparatioin:
             loan_df[categorical_feature] = label_encoder.transform(loan_df[categorical_feature])
 
         ###########################################################################
-        ## 5. 표준화 및 정규화
+        ## 4. 표준화 및 정규화
         ###########################################################################
 
         numeric_features = ['applicant_income', 'coapplicant_income', 'loan_amount_term']
 
         ###normalization
         #min_max scaler load
-        min_max_scalers = joblib.load(min_max_scalers_path)
+        min_max_scalers = joblib.load(f"{model_output_home}"
+                                      f"/model_output/min_max_scalers.joblib")
 
         # numeric_features 정규화
         print('Normalization')
