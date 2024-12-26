@@ -2,12 +2,13 @@ import os
 from sqlalchemy import create_engine, text
 import pandas as pd
 import joblib
+import sys
 
 feature_store_url = os.getenv("FEATURE_STORE_URL", "")
 model_output_home = os.getenv("MODEL_OUTPUT_HOME", "")
 mlops_data_store = os.getenv("MLOPS_DATA_STORE")
 
-class Preparatioin:
+class Preparation:
     def __init__(self, 
                  model_name: str, 
                  model_version: str, 
@@ -18,7 +19,7 @@ class Preparatioin:
         self._data_preparation_path = (f"{mlops_data_store}/data_preparation/{self._model_name}"
                                        f"/{self._model_version}/{self._base_day}")
         self._makedir()
-        
+
     def _makedir(self):
         if not os.path.isdir(self._data_preparation_path):
             os.makedirs(self._data_preparation_path)
@@ -125,3 +126,23 @@ class Preparatioin:
         feature_file_name = f"{self._model_name}_{self._model_version}.csv"
         loan_df.to_csv(f"{self._data_preparation_path}"
                        f"/{feature_file_name}", index=False)
+        
+if __name__ == "__main__":
+    print("sys.argv = {sys.argv}")
+    if len(sys.argv) != 4:
+        print("Insufficient arguments.")
+        sys.exit(1)
+
+    _model_name = sys.argv[1]
+    _model_version = sys.argv[2]
+    _base_day = sys.argv[3]
+
+    print(f"_model_name = {_model_name}")
+    print(f"_model_version = {_model_version}")
+    print(f"_base_day = {_base_day}")
+
+    preparation = Preparation(model_name = _model_name,
+                              model_version=_model_version,
+                              base_day=_base_day
+                              )
+    preparation.preprocessiong()
