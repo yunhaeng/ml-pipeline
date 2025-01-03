@@ -141,6 +141,7 @@ class Preparation:
         sql = f"""
             select *
                 from mlops.ineligible_loan_model_features
+               where base_dt = '{self._base_day}'
         """
 
         with engine.connect() as conn:
