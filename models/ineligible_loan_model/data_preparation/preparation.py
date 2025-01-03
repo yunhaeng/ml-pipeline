@@ -147,6 +147,10 @@ class Preparation:
         with engine.connect() as conn:
             #conn.connection 사용하면 sqlalchemy를 사용하라는 경고가 나옴. 하지만 pandas <= 2.2.0에서는 connection을 사용해야 연결 가능.
             loan_df = pd.read_sql(sql, con=conn.connection)
+
+        if loan_df.empty is True:
+            raise ValueError("loan df is empty!")
+
         return loan_df
         
 if __name__ == "__main__":
