@@ -40,9 +40,11 @@ class Preparation:
 
     def _save_encoded_features(self, loan_df):
         #save output data
+        print("Save output data")
         feature_file_name = f"{self._model_name}_{self._model_version}.csv"
         loan_df.to_csv(f"{self._data_preparation_path}"
                        f"/{feature_file_name}", index=False)
+        print("Save output data done")
 
     @staticmethod
     def transform_to_min_max_scale(loan_df, numeric_features):
