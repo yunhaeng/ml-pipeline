@@ -7,6 +7,7 @@ from airflow.operators.empty import EmptyOperator
 from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 
 from support.callback_functions import success_callback, failure_callback
+from airflow.operators.bash import BashOperator
 
 local_timezone = pendulum.timezone("Asia/Seoul")
 conn_id = "feature_store"
@@ -44,8 +45,16 @@ with DAG(dag_id="ineligible_loan_model",
         split_statements=True
     )
 
-    data_preperation = EmptyOperator(
-        task_id="데이터전처리"
+    data_preperation = BashOperator(
+        task_id="데이터전처리",
+        bash_command="cd {airlfow_dags_path}/models/ineligible_loan_model/docker && "
+                        "docker-compose up --build && docker-compose down",
+        env={"PYTHONPATH": "/home/mlops/data_preparation/preparation.py",
+             "MODEL_NAME": model_name,
+             "MODEL_VERSION": model_version,
+             "BASE_DAY": "{{ yesterday_ds_nodash }}"},
+        append_env=True,
+        retries=1
     )
 
     prediction = EmptyOperator(
