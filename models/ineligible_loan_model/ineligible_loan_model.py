@@ -47,9 +47,9 @@ with DAG(dag_id="ineligible_loan_model",
 
     data_preperation = BashOperator(
         task_id="데이터전처리",
-        bash_command="cd {airlfow_dags_path}/models/ineligible_loan_model/docker && "
+        bash_command=f"cd {airflow_dags_path}/models/ineligible_loan_model/docker && "
                         "docker-compose up --build && docker-compose down",
-        env={"PYTHONPATH": "/home/mlops/data_preparation/preparation.py",
+        env={"PYTHON_FILE": "/home/mlops/data_preparation/preparation.py",
              "MODEL_NAME": model_name,
              "MODEL_VERSION": model_version,
              "BASE_DAY": "{{ yesterday_ds_nodash }}"},

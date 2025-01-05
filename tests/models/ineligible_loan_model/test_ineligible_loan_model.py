@@ -46,7 +46,17 @@ class TestIneligibleLoanModel(unittest.TestCase):
             )
         preparation.preprocessiong()
 
+    def test_preparation_of_docker(self):
+        import models.ineligible_loan_model.ineligible_loan_model as model
 
+        env = {
+            "PYTHON_FILE": "/home/mlops/data_preparation/preparation.py",
+            "MODEL_NAME": model.model_name,
+            "MODEL_VERSION": model.model_version,
+            "BASE_DAY": self.base_day
+        }
+        model.data_preperation.__setattr__('env', env)
+        model.data_preperation.execute(self.context)
 
 if __name__ == '__main__':
     unittest.main()

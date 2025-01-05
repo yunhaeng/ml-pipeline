@@ -1,4 +1,5 @@
-version: "3"
+#docker 3 이상에서는 version이 필요없음.
+#version: "3"
 
 services:
   ineligible_loan_model_pipeline:
