@@ -58,5 +58,16 @@ class TestIneligibleLoanModel(unittest.TestCase):
         model.data_preperation.__setattr__('env', env)
         model.data_preperation.execute(self.context)
 
+    def test_prediction(self):
+        import models.ineligible_loan_model.ineligible_loan_model as model
+        from models.ineligible_loan_model.model.prediction import prediction
+
+        prediction = prediction(
+            model_name=model.model_name,
+            model_version=model.model_version,
+            base_day=self.base_day
+        )
+        prediction.predict()
+
 if __name__ == '__main__':
     unittest.main()
