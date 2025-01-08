@@ -46,6 +46,9 @@ class prediction:
         data, test_predicted = self._predict(loan_df, x_pred, model)
 
         #예측 결과 db 저장
+        self._save_predict_data(data, test_predicted)
+
+    def _save_predict_data(self, data, test_predicted):
         print(f"feature_store_url = {feature_store_url}")
         print(test_predicted.dtypes)
         engine = create_engine(feature_store_url)
